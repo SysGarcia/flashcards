@@ -1,0 +1,172 @@
+---
+// FlashcardGame.astro
+
+interface Flashcard {
+  imageSrc: string;
+  name: string;
+  type: string;
+  subtype: string;
+}
+
+const flashcards = [
+    { imageSrc: '/assets/Screenshot_1.jpg', name: 'CAOLINITA', type: 'Silicato', subtype: 'Filosilicato' },
+    { imageSrc: '/assets/Screenshot_2.jpg', name: 'GEOTHITA', type: 'No silicato', subtype: 'Hidróxido' },
+    { imageSrc: '/assets/Screenshot_3.jpg', name: 'CINABRIO', type: 'No silicato', subtype: 'Sulfuro' },
+    { imageSrc: '/assets/Screenshot_4.jpg', name: 'BIOTITA', type: 'Silicato', subtype: 'Filosilicato' },
+    { imageSrc: '/assets/Screenshot_5.jpg', name: 'ARAGONITO', type: 'No Silicato', subtype: 'Carbonato' },
+    { imageSrc: '/assets/Screenshot_6.jpg', name: 'DOLOMITA', type: 'No Silicato', subtype: 'Carbonato' },
+    { imageSrc: '/assets/Screenshot_7.jpg', name: 'SILVINA', type: 'No Silicato', subtype: 'Haluro' },
+    { imageSrc: '/assets/Screenshot_8.jpg', name: 'HALITA', type: 'No Silicato', subtype: 'Haluro' },
+    { imageSrc: '/assets/Screenshot_9.jpg', name: 'FLUORITA', type: 'No Silicato', subtype: 'Haluro' },
+    { imageSrc: '/assets/Screenshot_10.jpg', name: 'GALENA', type: 'No Silicato', subtype: 'Sulfuro' },
+    { imageSrc: '/assets/Screenshot_11.jpg', name: 'PIRITA', type: 'No Silicato', subtype: 'Sulfuro' },
+    { imageSrc: '/assets/Screenshot_12.jpg', name: 'HEMATITES', type: 'No Silicato', subtype: 'Óxido' },
+    { imageSrc: '/assets/Screenshot_13.jpg', name: 'MAGNETITA', type: 'No Silicato', subtype: 'Óxido' },
+    { imageSrc: '/assets/Screenshot_14.jpg', name: 'GRAFITO', type: 'No Silicato', subtype: 'Elemento nativo' },
+    { imageSrc: '/assets/Screenshot_15.jpg', name: 'AZUFRE', type: 'No Silicato', subtype: 'Elemento Nativo' },
+    { imageSrc: '/assets/Screenshot_16.jpg', name: 'FELDESPATO', type: 'Silicato', subtype: 'Tectosilicato' },
+    { imageSrc: '/assets/Screenshot_17.jpg', name: 'ANFÍBOL', type: 'Silicato', subtype: 'Inosilicato' },
+    { imageSrc: '/assets/Screenshot_18.jpg', name: 'PIROXENO', type: 'Silicato', subtype: 'Inosilicato' },
+    { imageSrc: '/assets/Screenshot_19.jpg', name: 'MOSCOVITA', type: 'Silicato', subtype: 'Filosilicato' },
+    { imageSrc: '/assets/Screenshot_20.jpg', name: 'TURMANILA', type: 'Silicato', subtype: 'Ciclosilicato' },
+    { imageSrc: '/assets/Screenshot_21.jpg', name: 'BERILO', type: 'Silicato', subtype: 'Ciclosilicato' },
+    { imageSrc: '/assets/Screenshot_22.jpg', name: 'GRANATE', type: 'Silicato', subtype: 'Nesosilicato' },
+    { imageSrc: '/assets/Screenshot_23.jpg', name: 'EPIDOTA', type: 'Silicato', subtype: 'Sorosilicato' },
+    { imageSrc: '/assets/Screenshot_24.jpg', name: 'SILLIMANITA', type: 'Silicato', subtype: 'Nesosilicato' },
+    { imageSrc: '/assets/Screenshot_25.jpg', name: 'ANDALUCITA', type: 'Silicato', subtype: 'Nesosilicato' },
+    { imageSrc: '/assets/Screenshot_26.jpg', name: 'CIANITA', type: 'Silicato', subtype: 'Nesosilicato' },
+    { imageSrc: '/assets/Screenshot_28.jpg', name: 'CALCITA', type: 'No Silicato', subtype: 'Carbonato' },
+    { imageSrc: '/assets/Screenshot_29.jpg', name: 'TALCO', type: 'Silicato', subtype: 'Filosilicato' },
+    { imageSrc: '/assets/Screenshot_30.jpg', name: 'OLIVINO', type: 'Silicato', subtype: 'Nesosilicato' },
+    { imageSrc: '/assets/Screenshot_31.jpg', name: 'ESTAUROLITA', type: 'Silicato', subtype: 'Nesosilicato' },
+]
+
+---
+
+<div class="container mx-auto p-4 flex flex-col md:flex-row items-start overflow-y-auto max-h-screen justify-center">
+    <div class="flex flex-col items-center">
+        <h1 class="text-2xl font-bold mb-4 text-center">Juego de mi bombon</h1>
+
+        <!-- Sección de Flashcard -->
+        <div id="flashcard" class="mb-4 flex justify-center w-96 h-96">
+            <img src={flashcards[0].imageSrc} alt="Flashcard" class="w-52 max-w-md mx-auto rounded-lg shadow-lg object-contain" />
+        </div>
+
+        <!-- Sección de entrada del usuario -->
+        <div class="flex flex-col items-center w-full mb-4">
+            <div class="flex flex-col space-y-2 w-64">
+                <input type="text" id="userName" placeholder="Nombre 📚" class="w-full p-2 border rounded" />
+                <input type="text" id="userType" placeholder="Tipo 🔮" class="w-full p-2 border rounded" />
+                <input type="text" id="userSubtype" placeholder="Subtipo ⚗️" class="w-full p-2 border rounded" />
+                <button id="checkAnswer" class="mx-auto mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Comprobar respuesta</button>
+            </div>
+        </div>
+
+        <!-- Sección de respuestas correctas -->
+        <div id="correctAnswers" class="mt-2 text-lg font-semibold hidden"></div>
+
+        <!-- Sección de puntuación y feedback -->
+        <div id="score" class="mt-4 text-lg font-semibold"></div>
+        <div id="feedback" class="mt-2 text-lg"></div>
+    </div>
+
+    <!-- Sección del historial de respuestas -->
+    <div class="flex flex-col items-center mt-4 md:mt-0 md:ml-4">
+        <h2 class="text-xl font-bold">Historial de Respuestas</h2>
+        <div id="history" class="mt-2 text-sm text-gray-600 overflow-y-auto max-h-48 w-[500px] border p-2 rounded bg-gray-100"></div>
+    </div>
+</div>
+
+
+<script define:vars={{ flashcards }}>
+let currentIndex = 0;
+let correctCount = 0;
+let totalCount = 0;
+const history = [];
+
+function updateFlashcard() {
+    const img = document.querySelector('#flashcard img');
+    if (img instanceof HTMLImageElement) {
+        img.src = flashcards[currentIndex].imageSrc;
+        img.alt = `Flashcard ${currentIndex + 1}`;
+    }
+}
+
+function updateScore() {
+    const scoreElement = document.getElementById('score');
+    if (scoreElement) {
+        scoreElement.textContent = `Puntuación: ${correctCount}/${totalCount}`;
+    }
+}
+
+function updateFeedback(message) {
+    const feedbackElement = document.getElementById('feedback');
+    if (feedbackElement) {
+        feedbackElement.textContent = message;
+    }
+}
+
+function updateHistory() {
+    const historyElement = document.getElementById('history');
+    if (historyElement) {
+        historyElement.innerHTML = history.map(entry => `<div>${entry}</div>`).join('');
+    }
+}
+
+const checkAnswerButton = document.getElementById('checkAnswer');
+if (checkAnswerButton) {
+    checkAnswerButton.addEventListener('click', () => {
+        const userNameInput = document.getElementById('userName');
+        const userTypeInput = document.getElementById('userType');
+        const userSubtypeInput = document.getElementById('userSubtype');
+        
+        if (userNameInput instanceof HTMLInputElement && 
+            userTypeInput instanceof HTMLInputElement && 
+            userSubtypeInput instanceof HTMLInputElement) {
+            
+            const userName = userNameInput.value.toLowerCase();
+            const userType = userTypeInput.value.toLowerCase();
+            const userSubtype = userSubtypeInput.value.toLowerCase();
+            
+            const currentFlashcard = flashcards[currentIndex];
+            let correctAnswers = 0;
+
+            if (userName === currentFlashcard.name.toLowerCase()) correctAnswers++;
+            if (userType === currentFlashcard.type.toLowerCase()) correctAnswers++;
+            if (userSubtype === currentFlashcard.subtype.toLowerCase()) correctAnswers++;
+
+            correctCount += correctAnswers;
+            totalCount += 3;
+
+            // Almacenar en el historial
+            history.push(`Nombre -> ${userName}, Tipo -> ${userType}, Subtipo -> ${userSubtype} | Correcto: ${correctAnswers} de 3`);
+            updateHistory();
+
+            // Mostrar respuestas correctas
+            const correctAnswersElement = document.getElementById('correctAnswers');
+            if (correctAnswersElement) {
+                correctAnswersElement.innerHTML = `
+                    Respuestas correctas: 
+                    Nombre: ${currentFlashcard.name}, 
+                    Tipo: ${currentFlashcard.type}, 
+                    Subtipo: ${currentFlashcard.subtype}
+                `;
+                correctAnswersElement.classList.remove('hidden'); // Mostrar el contenedor
+            }
+
+            updateFeedback(`Respuestas correctas: ${correctAnswers} de 3`);
+            updateScore();
+
+            currentIndex = (currentIndex + 1) % flashcards.length;
+            updateFlashcard();
+
+            // Limpiar campos de entrada
+            userNameInput.value = '';
+            userTypeInput.value = '';
+            userSubtypeInput.value = '';
+        }
+    });
+}
+
+updateScore();
+</script>

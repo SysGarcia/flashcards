@@ -1,0 +1,23 @@
+---
+// Flashcard.astro
+const { imageSrc, answer } = Astro.props; // Propiedades que recibirán la imagen y la respuesta
+---
+
+<div class="flashcard">
+    <div class="front">
+        <img src={imageSrc} alt="Flashcard image" />
+    </div>
+    <div class="back">
+        <h2>Respuesta: {answer}</h2>
+    </div>
+</div>
+
+<style>
+
+    img{
+        width: 90%;
+        height: 90%;
+        background-size: cover;
+    }
+
+</style>
